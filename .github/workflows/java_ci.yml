@@ -1,0 +1,52 @@
+name: Java CI
+
+on:
+  push:
+    branches:
+      - main
+      - development
+      - refactor
+    paths:
+      - java/**
+  pull_request:
+    paths:
+      - java/**
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: './java'
+
+env:
+  JAVA_DISTRIBUTION: "oracle" # See https://github.com/actions/setup-java?tab=readme-ov-file#supported-distributions
+  DOTENV_BASE64: ${{ secrets.DOTENV_BASE64 }}
+
+jobs:
+  verify:
+    name: Verify Maven JDK
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [ '17', '23' ] # See https://github.com/actions/setup-java?tab=readme-ov-file#supported-version-syntax
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup JDK ${{ matrix.java }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
+          java-version: ${{ matrix.java }}
+          cache: maven # Remove this to turn off caching dependencies
+      - name: Create dotenv and .env file from GitHub Secrets
+        run: | 
+          mkdir -p jakarta/src/main/resources
+          if [[ -n "${DOTENV_BASE64}" ]]; then
+              echo -n "${DOTENV_BASE64}" | base64 -d > jakarta/src/main/resources/dotenv
+              echo -n "${DOTENV_BASE64}" | base64 -d > jakarta/src/main/resources/.env
+          else
+              touch jakarta/src/main/resources/.env
+              touch jakarta/src/main/resources/dotenv
+          fi
+        env:
+          DOTENV_BASE64: ${{ env.DOTENV_BASE64 }}
+      - name: Run the Maven verify phase
+        run: mvn --batch-mode --update-snapshots verify
