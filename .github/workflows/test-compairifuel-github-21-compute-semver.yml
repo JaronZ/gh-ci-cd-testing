@@ -1,0 +1,72 @@
+name: "Test Compute Semver (Compairifuel/.github #21)"
+
+on:
+    workflow_dispatch:
+        inputs:
+            defaults:
+                description: "Whether to test defaults test cases"
+                required: true
+                default: true
+                type: boolean
+
+jobs:
+    test-defaults-patch-only:
+        runs-on: ubuntu-latest
+        if: github.event.inputs.defaults == 'true'
+        steps:
+            - uses: actions/checkout@v6
+            - uses: compairifuel/.github/actions/compute-semver@feat/semver-workflow
+              name: Perform Test
+              id: compute-semver
+              with:
+                commits: |
+                    fix: fix bug
+                    docs: update documentation
+                    chore: update dependencies
+                latest-tag: v0.0.0
+                is-trunk: true
+            - name: Output Result
+              run: |
+                echo "Computed Semver: ${{ steps.compute-semver.outputs.semver }}"
+                echo "Changelog: ${{ steps.compute-semver.outputs.changelog }}"
+
+    test-defaults-minor-only:
+        runs-on: ubuntu-latest
+        if: github.event.inputs.defaults == 'true'
+        steps:
+            - uses: actions/checkout@v6
+            - uses: compairifuel/.github/actions/compute-semver@feat/semver-workflow
+              name: Perform Test
+              id: compute-semver
+              with:
+                commits: |
+                    feat: add new feature
+                    feature: improve existing feature
+                    feat: enhance performance
+                latest-tag: v0.0.0
+                is-trunk: true
+            - name: Output Result
+              run: |
+                echo "Computed Semver: ${{ steps.compute-semver.outputs.semver }}"
+                echo "Changelog: ${{ steps.compute-semver.outputs.changelog }}"
+
+    test-defaults-major-only:
+        runs-on: ubuntu-latest
+        if: github.event.inputs.defaults == 'true'
+        steps:
+            - uses: actions/checkout@v6
+            - uses: compairifuel/.github/actions/compute-semver@feat/semver-workflow
+              name: Perform Test
+              id: compute-semver
+              with:
+                commits: |
+                    feat!: breaking change in feature
+                    fix!: breaking change in fix
+                    refactor!: breaking change in refactor
+                latest-tag: v0.0.0
+                is-trunk: true
+            - name: Output Result
+              run: |
+                echo "Computed Semver: ${{ steps.compute-semver.outputs.semver }}"
+                echo "Changelog: ${{ steps.compute-semver.outputs.changelog }}"
+                
