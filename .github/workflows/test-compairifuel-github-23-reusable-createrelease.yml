@@ -1,0 +1,45 @@
+name: "Test Reusable Create Release (Compairifuel/.github #23)"
+
+on:
+  workflow_dispatch:
+    inputs:
+      defaults:
+        description: "Whether to test defaults test cases"
+        required: true
+        default: true
+        type: boolean
+
+permissions:
+  contents: write
+
+jobs:
+  test-defaults-create-release:
+    if: github.event.inputs.defaults == 'true'
+    uses: compairifuel/.github/.github/workflows/reusable-createrelease.yml@feat/release-workflow
+    with:
+      tag-name: "v1.2.3"
+      semver: "patch"
+    secrets:
+      github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  after-defaults-create-release:
+    runs-on: ubuntu-latest
+    if: github.event.inputs.defaults == 'true'
+    needs: test-defaults-create-release
+    steps:
+      - name: Confirm created releases exist
+        run: |
+          curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/releases/tags/v1.2.3"
+      - name: Confirm created tag exists
+        run: |
+          curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/git/refs/tags/v1.2.3"
+      - name: Cleanup created releases
+        run: |
+          RELEASE_ID=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/releases/tags/v1.2.3" | jq '.id')
+          curl -X DELETE -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/releases/$RELEASE_ID"
+          curl -X DELETE -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/git/refs/tags/v1.2.3"
