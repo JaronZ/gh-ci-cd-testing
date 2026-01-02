@@ -1,0 +1,44 @@
+name: "Test Validate Commits (Compairifuel/.github #22)"
+
+on:
+    workflow_dispatch:
+        inputs:
+            defaults:
+                description: "Whether to test defaults test cases"
+                required: true
+                default: true
+                type: boolean
+
+env:
+    DEFAULT_ALLOWED_TYPES: "build,chore,ci,docs,feat,fix,perf,refactor,revert,style,test"
+
+jobs:
+    test-defaults-valid-commits:
+        runs-on: ubuntu-latest
+        if: github.event.inputs.defaults == 'true'
+        steps:
+            - uses: actions/checkout@v6
+            - uses: compairifuel/.github/actions/validate-commits@feat/commitlinter-workflow
+              name: Perform Test
+              id: validate-commits
+              with:
+                commits: |
+                    feat: add new feature
+                    fix: fix bug
+                    docs: update documentation
+                allowed_types: "${{ env.DEFAULT_ALLOWED_TYPES }}"
+
+    test-defaults-invalid-commits:
+        runs-on: ubuntu-latest
+        if: github.event.inputs.defaults == 'true'
+        steps:
+            - uses: actions/checkout@v6
+            - uses: compairifuel/.github/actions/validate-commits@feat/commitlinter-workflow
+              name: Perform Test
+              id: validate-commits
+              with:
+                commits: |
+                    feat: add new feature
+                    bugfix: fix bug with wrong type
+                    docs: update documentation
+                allowed_types: "${{ env.DEFAULT_ALLOWED_TYPES }}"
