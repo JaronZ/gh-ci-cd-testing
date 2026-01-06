@@ -14,6 +14,7 @@ permissions:
 
 jobs:
   test-defaults-create-release:
+    name: "GIVEN tag-name=v1.2.3 AND semver=v1.2.3 WHEN reusable-createrelease"
     if: github.event.inputs.defaults == 'true'
     uses: compairifuel/.github/.github/workflows/reusable-createrelease.yml@feat/release-workflow
     with:
@@ -23,6 +24,7 @@ jobs:
       github-token: ${{ secrets.GITHUB_TOKEN }}
 
   after-defaults-create-release:
+    name: "THEN release v1.2.3 exists AND tag v1.2.3 exists"
     runs-on: ubuntu-latest
     if: github.event.inputs.defaults == 'true'
     needs: test-defaults-create-release
