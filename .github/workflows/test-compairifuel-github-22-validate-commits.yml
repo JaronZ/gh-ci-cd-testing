@@ -32,8 +32,8 @@ jobs:
             - name: Assert does not error
               uses: jaronline/action-assertions/assert-equals@main
               with:
-                expected: 'true'
-                actual: ${{ success() }}
+                expected: 'success'
+                actual: ${{ job.status }}
 
     test-defaults-invalid-commits:
         name: "GIVEN feat,bugfix,docs AND allowed_types IS build,chore,ci,docs,feat,fix,perf,refactor,revert,style,test WHEN validate-commits THEN errors"
@@ -54,5 +54,5 @@ jobs:
             - name: Assert errors
               uses: jaronline/action-assertions/assert-equals@main
               with:
-                expected: 'false'
-                actual: ${{ success() }}
+                expected: 'failure'
+                actual: ${{ job.status }}
