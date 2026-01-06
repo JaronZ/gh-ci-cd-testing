@@ -75,6 +75,10 @@ jobs:
                     ==END==
                     refactor!: breaking change in refactor
                     ==END==
+                    feat: add a new feature
+
+                    BREAKING CHANGE: this is a breaking change
+                    ==END==
                 latest-tag: v0.0.0
                 is-trunk: true
             - name: Output Result
