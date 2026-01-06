@@ -35,7 +35,7 @@ jobs:
                 actual: ${{ steps.compute-semver.outputs.semver }}
             - uses: jaronline/action-assertions/assert-equals@main
               with:
-                expected: |
+                expected: |-
                     PATCH:fix: fix bug
                     PATCH:docs: update documentation
                     PATCH:chore: update dependencies
@@ -66,7 +66,7 @@ jobs:
                 actual: ${{ steps.compute-semver.outputs.semver }}
             - uses: jaronline/action-assertions/assert-equals@main
               with:
-                expected: |
+                expected: |-
                     MINOR:feat: add new feature
                     MINOR:feature: improve existing feature
                     MINOR:feat: enhance performance
@@ -101,7 +101,7 @@ jobs:
                 actual: ${{ steps.compute-semver.outputs.semver }}
             - uses: jaronline/action-assertions/assert-equals@main
               with:
-                expected: |
+                expected: |-
                     MAJOR:feat!: breaking change in feature
                     MAJOR:fix!: breaking change in fix
                     MAJOR:refactor!: breaking change in refactor
