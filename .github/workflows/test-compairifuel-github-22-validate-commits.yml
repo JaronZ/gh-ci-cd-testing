@@ -29,6 +29,11 @@ jobs:
                     fix: fix bug
                     docs: update documentation
                 allowed_types: "${{ env.DEFAULT_ALLOWED_TYPES }}"
+            - name: Assert does not error
+              uses: jaronline/action-assertions/assert-equals@main
+              with:
+                expected: 'true'
+                actual: ${{ success() }}
 
     test-defaults-invalid-commits:
         name: "GIVEN feat,bugfix,docs AND allowed_types IS build,chore,ci,docs,feat,fix,perf,refactor,revert,style,test WHEN validate-commits THEN errors"
@@ -46,3 +51,8 @@ jobs:
                     bugfix: fix bug with wrong type
                     docs: update documentation
                 allowed_types: "${{ env.DEFAULT_ALLOWED_TYPES }}"
+            - name: Assert errors
+              uses: jaronline/action-assertions/assert-equals@main
+              with:
+                expected: 'false'
+                actual: ${{ success() }}
