@@ -11,6 +11,7 @@ on:
 
 jobs:
     test-defaults-patch-only:
+        name: "GIVEN fix,docs,chore commits AND latest-tag=v0.0.0 AND is-trunk WHEN compute-semver THEN computed-semver=v0.0.1 AND changelog only contains patch commits"
         runs-on: ubuntu-latest
         if: github.event.inputs.defaults == 'true'
         steps:
@@ -31,6 +32,7 @@ jobs:
                 echo "Changelog: ${{ steps.compute-semver.outputs.changelog }}"
 
     test-defaults-minor-only:
+        name: "GIVEN feat,feature commits AND latest-tag=v0.0.0 AND is-trunk WHEN compute-semver THEN computed-semver=v0.1.0 AND changelog only contains minor commits"
         runs-on: ubuntu-latest
         if: github.event.inputs.defaults == 'true'
         steps:
@@ -51,6 +53,7 @@ jobs:
                 echo "Changelog: ${{ steps.compute-semver.outputs.changelog }}"
 
     test-defaults-major-only:
+        name: "GIVEN breaking changes AND latest-tag=v0.0.0 AND is-trunk WHEN compute-semver THEN computed-semver=v1.0.0 AND changelog only contains major commits"
         runs-on: ubuntu-latest
         if: github.event.inputs.defaults == 'true'
         steps:
