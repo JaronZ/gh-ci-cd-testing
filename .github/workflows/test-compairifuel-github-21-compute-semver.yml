@@ -22,8 +22,11 @@ jobs:
               with:
                 commits: |
                     fix: fix bug
+                    ==END==
                     docs: update documentation
+                    ==END==
                     chore: update dependencies
+                    ==END==
                 latest-tag: v0.0.0
                 is-trunk: true
             - name: Output Result
@@ -43,8 +46,11 @@ jobs:
               with:
                 commits: |
                     feat: add new feature
+                    ==END==
                     feature: improve existing feature
+                    ==END==
                     feat: enhance performance
+                    ==END==
                 latest-tag: v0.0.0
                 is-trunk: true
             - name: Output Result
@@ -64,8 +70,11 @@ jobs:
               with:
                 commits: |
                     feat!: breaking change in feature
+                    ==END==
                     fix!: breaking change in fix
+                    ==END==
                     refactor!: breaking change in refactor
+                    ==END==
                 latest-tag: v0.0.0
                 is-trunk: true
             - name: Output Result
