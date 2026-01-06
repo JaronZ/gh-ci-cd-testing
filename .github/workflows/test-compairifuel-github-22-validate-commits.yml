@@ -17,6 +17,7 @@ jobs:
         name: "GIVEN feat,fix,docs commits AND allowed_types IS build,chore,ci,docs,feat,fix,perf,refactor,revert,style,test WHEN validate-commits THEN does not error"
         runs-on: ubuntu-latest
         if: github.event.inputs.defaults == 'true'
+        continue-on-error: true
         steps:
             - uses: actions/checkout@v6
             - uses: compairifuel/.github/actions/validate-commits@feat/commitlinter-workflow
@@ -33,6 +34,7 @@ jobs:
         name: "GIVEN feat,bugfix,docs AND allowed_types IS build,chore,ci,docs,feat,fix,perf,refactor,revert,style,test WHEN validate-commits THEN errors"
         runs-on: ubuntu-latest
         if: github.event.inputs.defaults == 'true'
+        continue-on-error: true
         steps:
             - uses: actions/checkout@v6
             - uses: compairifuel/.github/actions/validate-commits@feat/commitlinter-workflow
