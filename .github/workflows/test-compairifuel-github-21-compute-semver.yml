@@ -29,10 +29,14 @@ jobs:
                     ==END==
                 latest-tag: v0.0.0
                 is-trunk: true
-            - name: Output Result
-              run: |
-                echo "Computed Semver: ${{ steps.compute-semver.outputs.semver }}"
-                echo "Changelog: ${{ steps.compute-semver.outputs.changelog }}"
+            - uses: jaronline/action-assertions/assert-equals@main
+              with:
+                expected: v0.0.1
+                actual: ${{ steps.compute-semver.outputs.semver }}
+            - uses: jaronline/action-assertions/assert-equals@main
+              with:
+                expected: "TODO"
+                actual: ${{ steps.compute-semver.outputs.changelog }}
 
     test-defaults-minor-only:
         name: "GIVEN feat,feature commits AND latest-tag=v0.0.0 AND is-trunk WHEN compute-semver THEN semver=v0.1.0 AND changelog only contains minor commits"
@@ -53,10 +57,14 @@ jobs:
                     ==END==
                 latest-tag: v0.0.0
                 is-trunk: true
-            - name: Output Result
-              run: |
-                echo "Computed Semver: ${{ steps.compute-semver.outputs.semver }}"
-                echo "Changelog: ${{ steps.compute-semver.outputs.changelog }}"
+            - uses: jaronline/action-assertions/assert-equals@main
+              with:
+                expected: v0.1.0
+                actual: ${{ steps.compute-semver.outputs.semver }}
+            - uses: jaronline/action-assertions/assert-equals@main
+              with:
+                expected: "TODO"
+                actual: ${{ steps.compute-semver.outputs.changelog }}
 
     test-defaults-major-only:
         name: "GIVEN breaking changes AND latest-tag=v0.0.0 AND is-trunk WHEN compute-semver THEN semver=v1.0.0 AND changelog only contains major commits"
@@ -81,8 +89,11 @@ jobs:
                     ==END==
                 latest-tag: v0.0.0
                 is-trunk: true
-            - name: Output Result
-              run: |
-                echo "Computed Semver: ${{ steps.compute-semver.outputs.semver }}"
-                echo "Changelog: ${{ steps.compute-semver.outputs.changelog }}"
-                
+            - uses: jaronline/action-assertions/assert-equals@main
+              with:
+                expected: v1.0.0
+                actual: ${{ steps.compute-semver.outputs.semver }}
+            - uses: jaronline/action-assertions/assert-equals@main
+              with:
+                expected: "TODO"
+                actual: ${{ steps.compute-semver.outputs.changelog }}
