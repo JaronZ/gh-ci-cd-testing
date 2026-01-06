@@ -30,7 +30,7 @@ jobs:
                     docs: update documentation
                 allowed_types: "${{ env.DEFAULT_ALLOWED_TYPES }}"
             - name: Assert does not error
-              uses: jaronline/action-assertions/assert-equals@main
+              uses: jaronline/action-assertions/assert-equals@v1
               with:
                 expected: 'success'
                 actual: ${{ job.status }}
@@ -52,7 +52,7 @@ jobs:
                     docs: update documentation
                 allowed_types: "${{ env.DEFAULT_ALLOWED_TYPES }}"
             - name: Assert errors
-              uses: jaronline/action-assertions/assert-equals@main
+              uses: jaronline/action-assertions/assert-equals@v1
               with:
                 expected: 'failure'
                 actual: ${{ job.status }}

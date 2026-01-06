@@ -30,12 +30,12 @@ jobs:
                 latest-tag: v0.0.0
                 is-trunk: true
             - name: Assert semver is v0.1.0
-              uses: jaronline/action-assertions/assert-equals@main
+              uses: jaronline/action-assertions/assert-equals@v1
               with:
                 expected: v0.0.1
                 actual: ${{ steps.compute-semver.outputs.semver }}
             - name: Assert changelog only contains patch commits
-              uses: jaronline/action-assertions/assert-equals@main
+              uses: jaronline/action-assertions/assert-equals@v1
               with:
                 expected: |-
                     PATCH:fix: fix bug
@@ -63,12 +63,12 @@ jobs:
                 latest-tag: v0.0.0
                 is-trunk: true
             - name: Assert semver is v0.1.0
-              uses: jaronline/action-assertions/assert-equals@main
+              uses: jaronline/action-assertions/assert-equals@v1
               with:
                 expected: v0.1.0
                 actual: ${{ steps.compute-semver.outputs.semver }}
             - name: Assert changelog only contains minor commits
-              uses: jaronline/action-assertions/assert-equals@main
+              uses: jaronline/action-assertions/assert-equals@v1
               with:
                 expected: |-
                     MINOR:feat: add new feature
@@ -100,12 +100,12 @@ jobs:
                 latest-tag: v0.0.0
                 is-trunk: true
             - name: Assert semver is v1.0.0
-              uses: jaronline/action-assertions/assert-equals@main
+              uses: jaronline/action-assertions/assert-equals@v1
               with:
                 expected: v1.0.0
                 actual: ${{ steps.compute-semver.outputs.semver }}
             - name: Assert changelog only contains major commits
-              uses: jaronline/action-assertions/assert-equals@main
+              uses: jaronline/action-assertions/assert-equals@v1
               with:
                 expected: |-
                     MAJOR:feat!: breaking change in feature
