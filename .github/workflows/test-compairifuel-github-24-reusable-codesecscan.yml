@@ -1,0 +1,35 @@
+name: "Test Reusable Code Security Scan (Comaprifiuel/.github #24)"
+
+on:
+  workflow_dispatch:
+    inputs:
+      defaults:
+        description: "Whether to test defaults test cases"
+        required: true
+        default: true
+        type: boolean
+
+permissions:
+  contents: write
+
+jobs:
+  test-defaults-codesecscan:
+    name: "WHEN reusable-codesecscan"
+    if: github.event.inputs.defaults == 'true'
+    uses: compairifuel/.github/.github/workflows/reusable-codesecscan.yml@feat/staticcode-workflow
+
+  after-defaults-codesecscan-semgrep-json:
+    name: "THEN semgrep.json exists in semgrep-analysis artifact"
+    runs-on: ubuntu-latest
+    if: github.event.inputs.defaults == 'true'
+    needs: test-defaults-codesecscan
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v7
+        with:
+          name: semgrep-analysis
+      - name: Assert semgrep.json exists
+        uses: jaronline/action-assertions/assert-file-exists@main
+        with:
+          path: semgrep.json
+      
