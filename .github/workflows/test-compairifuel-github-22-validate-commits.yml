@@ -35,7 +35,7 @@ jobs:
                 expected: 'success'
                 actual: ${{ steps.validate-commits.outcome }}
 
-    test-defaults-invalid-commits:
+    test-defaults-invalid-similair-commits:
         name: "GIVEN feat,bugfix,docs AND allowed_types IS build,chore,ci,docs,feat,fix,perf,refactor,revert,style,test WHEN validate-commits THEN outcome=failure"
         runs-on: ubuntu-latest
         if: github.event.inputs.defaults == 'true'
@@ -50,6 +50,27 @@ jobs:
                     feat: add new feature
                     bugfix: fix bug with wrong type
                     docs: update documentation
+                allowed_types: "${{ env.DEFAULT_ALLOWED_TYPES }}"
+            - name: Assert errors
+              uses: jaronline/action-assertions/assert-equals@v1
+              with:
+                expected: 'failure'
+                actual: ${{ steps.validate-commits.outcome }}
+
+    test-defaults-invalid-different-commits:
+        name: "GIVEN somethingcompletelydifferent,doesnotexist AND allowed_types IS build,chore,ci,docs,feat,fix,perf,refactor,revert,style,test WHEN validate-commits THEN outcome=failure"
+        runs-on: ubuntu-latest
+        if: github.event.inputs.defaults == 'true'
+        steps:
+            - uses: actions/checkout@v6
+            - uses: compairifuel/.github/actions/validate-commits@feat/commitlinter-workflow
+              name: Perform Test
+              continue-on-error: true
+              id: validate-commits
+              with:
+                commits: |
+                    somethingcompletelydifferent: this is not the feature you are looking for
+                    doesnotexist: an empty commit
                 allowed_types: "${{ env.DEFAULT_ALLOWED_TYPES }}"
             - name: Assert errors
               uses: jaronline/action-assertions/assert-equals@v1
