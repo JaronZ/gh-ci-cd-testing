@@ -26,8 +26,11 @@ jobs:
               with:
                 commits: |
                     feat: add new feature
+                    ==END==
                     fix: fix bug
+                    ==END==
                     docs: update documentation
+                    ==END==
                 allowed_types: "${{ env.DEFAULT_ALLOWED_TYPES }}"
             - name: Assert does not error
               uses: jaronline/action-assertions/assert-equals@v1
@@ -48,8 +51,11 @@ jobs:
               with:
                 commits: |
                     feat: add new feature
+                    ==END==
                     bugfix: fix bug with wrong type
+                    ==END==
                     docs: update documentation
+                    ==END==
                 allowed_types: "${{ env.DEFAULT_ALLOWED_TYPES }}"
             - name: Assert errors
               uses: jaronline/action-assertions/assert-equals@v1
@@ -70,7 +76,9 @@ jobs:
               with:
                 commits: |
                     somethingcompletelydifferent: this is not the feature you are looking for
+                    ==END==
                     doesnotexist: an empty commit
+                    ==END==
                 allowed_types: "${{ env.DEFAULT_ALLOWED_TYPES }}"
             - name: Assert errors
               uses: jaronline/action-assertions/assert-equals@v1
