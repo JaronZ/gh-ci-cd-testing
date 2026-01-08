@@ -1,0 +1,74 @@
+name: "Test Reusable Push Image to Registry (Comaprifiuel/.github #26)"
+
+on:
+  workflow_dispatch:
+    inputs:
+      defaults:
+        description: "Whether to test defaults test cases"
+        required: true
+        default: true
+        type: boolean
+
+permissions:
+  contents: write
+
+jobs:
+  given-ghcr-test-image-when-containerregistrypusher:
+    name: "GIVEN registry=ghcr.io AND image_name=jaronz/test-image WHEN reusable-containerregistrypusher"
+    if: github.event.inputs.defaults == 'true'
+    uses: compairifuel/.github/.github/workflows/reusable-containerregistrypusher.yml@feat/containerregistry-workflow
+    permissions:
+      contents: write
+      packages: write
+    with:
+      registry: ghcr.io
+      image_name: jaronz/test-image
+    secrets:
+      registry_username: ${{ github.actor }}
+      registry_password: ${{ secrets.GITHUB_TOKEN }}
+
+  # then-image-pushed-ghcr-test-image:
+  #   name: "THEN image has been pushed to registry ghcr.io"
+  #   runs-on: ubuntu-latest
+  #   if: github.event.inputs.defaults == 'true'
+  #   needs: given-ghcr-test-image-when-containerregistrypusher
+  #   steps:
+  #     - name: Log in to registry
+  #       uses: docker/login-action@v3
+  #       with:
+  #         registry: ghcr.io
+  #         username: ${{ github.actor }}
+  #         password: ${{ secrets.GITHUB_TOKEN }}
+  #     - name: Check if image exists
+  #       id: check-image
+  #       continue-on-error: true
+  #       run: |
+  #         docker image inspect jaronz/test-image@${{ needs.given-ghcr-test-image-when-containerregistrypusher.outputs.imageid }}
+  #     - name: Assert inspection success
+  #       uses: jaronline/action-assertions/assert-equals@v1
+  #       with:
+  #         expected: 'success'
+  #         actual: ${{ steps.check-image.outcome }}
+
+  after-given-ghcr-test-image-when-containerregistrypusher:
+    runs-on: ubuntu-latest
+    if: github.event.inputs.defaults == 'true'
+    needs:
+      - given-ghcr-test-image-when-containerregistrypusher
+      # - then-image-pushed-ghcr-test-image
+    steps:
+      - name: Get Package Version
+        id: get-package-Version
+        run: |
+          VERSION=$(gh api -H "Authorization: Bearer ${{ env.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            /users/jaronz/packages/container/test-image/versions | jq -r '.[] | select(.name=="${{ env.IMAGE_ID }}")')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          IMAGE_ID: ${{ needs.given-ghcr-test-image-when-containerregistrypusher.outputs.imageid }}
+      # - name: Cleanup image
+      #   run: |
+      #     docker rmi ghcr.io/jaronz/test-image@${{ needs.given-ghcr-test-image-when-containerregistrypusher.outputs.imageid }}
+    
