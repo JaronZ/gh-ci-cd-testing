@@ -14,14 +14,14 @@ env:
 
 jobs:
     test-defaults-valid-commits:
-        name: "GIVEN feat,fix,docs commits AND allowed_types IS build,chore,ci,docs,feat,fix,perf,refactor,revert,style,test WHEN validate-commits THEN does not error"
+        name: "GIVEN feat,fix,docs commits AND allowed_types IS build,chore,ci,docs,feat,fix,perf,refactor,revert,style,test WHEN validate-commits THEN outcome=success"
         runs-on: ubuntu-latest
         if: github.event.inputs.defaults == 'true'
-        continue-on-error: true
         steps:
             - uses: actions/checkout@v6
             - uses: compairifuel/.github/actions/validate-commits@feat/commitlinter-workflow
               name: Perform Test
+              continue-on-error: true
               id: validate-commits
               with:
                 commits: |
@@ -33,17 +33,17 @@ jobs:
               uses: jaronline/action-assertions/assert-equals@v1
               with:
                 expected: 'success'
-                actual: ${{ job.status }}
+                actual: ${{ steps.validate-commits.outcome }}
 
     test-defaults-invalid-commits:
-        name: "GIVEN feat,bugfix,docs AND allowed_types IS build,chore,ci,docs,feat,fix,perf,refactor,revert,style,test WHEN validate-commits THEN errors"
+        name: "GIVEN feat,bugfix,docs AND allowed_types IS build,chore,ci,docs,feat,fix,perf,refactor,revert,style,test WHEN validate-commits THEN outcome=failure"
         runs-on: ubuntu-latest
         if: github.event.inputs.defaults == 'true'
-        continue-on-error: true
         steps:
             - uses: actions/checkout@v6
             - uses: compairifuel/.github/actions/validate-commits@feat/commitlinter-workflow
               name: Perform Test
+              continue-on-error: true
               id: validate-commits
               with:
                 commits: |
@@ -55,4 +55,4 @@ jobs:
               uses: jaronline/action-assertions/assert-equals@v1
               with:
                 expected: 'failure'
-                actual: ${{ job.status }}
+                actual: ${{ steps.validate-commits.outcome }}
