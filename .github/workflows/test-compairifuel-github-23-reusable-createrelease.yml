@@ -19,7 +19,6 @@ jobs:
     uses: compairifuel/.github/.github/workflows/reusable-createrelease.yml@feat/release-workflow
     with:
       tag-name: "v1.2.3"
-      semver: "v1.2.3"
     secrets:
       github-token: ${{ secrets.GITHUB_TOKEN }}
 
