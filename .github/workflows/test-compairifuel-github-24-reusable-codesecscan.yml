@@ -22,6 +22,7 @@ jobs:
     permissions:
       contents: write
       security-events: write
+      actions: read
 
   after-defaults-codesecscan-semgrep-json:
     name: "THEN semgrep.json exists in semgrep-analysis artifact"
