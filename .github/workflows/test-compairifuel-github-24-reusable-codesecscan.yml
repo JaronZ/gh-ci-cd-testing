@@ -18,7 +18,7 @@ jobs:
     if: github.event.inputs.defaults == 'true'
     uses: compairifuel/.github/.github/workflows/reusable-codesecscan.yml@feat/staticcode-workflow
     with:
-      fail_on: "WARNING"
+      fail_on: "INFO"
     permissions:
       contents: write
       security-events: write
