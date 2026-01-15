@@ -35,7 +35,7 @@ jobs:
         with:
           name: semgrep-analysis
       - name: Assert semgrep.json exists
-        uses: jaronline/action-assertions/assert-file-exists@main
+        uses: jaronline/action-assertions/assert-path-exists@v1
         with:
           path: semgrep.json
       
